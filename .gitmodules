@@ -1,0 +1,3 @@
+[submodule "cpplap"]
+	path = cpplap
+	url = git@github.com:hsandmeyer/cpplap.git
