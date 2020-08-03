@@ -1,6 +1,6 @@
 #ifndef DMD_H
 #define DMD_H
-#include "cpplap/cpplap.h"
+#include "cpplap.h"
 #include "ray.h"
 #include <limits>
 #include <tuple>

@@ -26,15 +26,6 @@ int main()
     float     sig_spot    = 50.0_um;   // The intensity of the beam is modelled by a guass. This is sigma of this gauss
     RayTracer traycer     = RayTracer(dparams, input_phi, input_theta, wave_length, sig_spot);
 
-    /* Parameters used to plot the 3D-plot of 3x3 mirrors (See README)
-    dparams.nx          = 3;
-    dparams.ny          = 3;
-    dparams.mirror_size = 7250.0_nm;
-    dparams.mirror_dist = 310.0_nm;
-    dparams.angle       = 12_deg;
-    RayTracer traycer   = RayTracer(dparams, -21_deg, 21_deg, 532.0_nm, 5.0_um);
-    */
-
     /*Print out parameters*/
     std::cout << traycer << std::endl;
 
