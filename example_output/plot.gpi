@@ -1,0 +1,30 @@
+reset
+set encoding utf8
+set title "Ray tracing"
+set xrange [-10:10]
+set yrange [-10:10]
+set xlabel "φ [deg]"
+set ylabel "θ [deg]"
+set term png enhanced
+set output "image_raytracing.png"
+plot "ray_traycing.txt" u ($1*180/pi):($2*180/pi):3 with image notitle
+set output
+
+set title "Analytic solution"
+set cbrange [0:0.04]
+set term png enhanced
+set output "image_analytic.png"
+plot "analytic.txt" u ($1*180/pi):($2*180/pi):3 with image notitle
+set output
+
+reset
+
+set term png enhanced
+set output "diffraction_points.png"
+set xtics 0.00001
+set ytics 0.00001
+set xrange [-1.5e-5:1.5e-5]
+set yrange [-1.5e-5:1.5e-5]
+set zrange [-1.0e-6:1.5e-6]
+splot "diff_points.txt" u 1:2:3:5 lc palette notitle
+set output

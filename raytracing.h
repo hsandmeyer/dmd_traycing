@@ -63,7 +63,7 @@ class RayTracer {
 
     friend std::ostream &operator<<(std::ostream &stream, const RayTracer &a);
 
-    std::complex<float> computeReferencePixel(const cpplap::Vect<float> out, const bool flipped)
+    std::complex<float> computeOneMirrorPixel(const cpplap::Vect<float> out, const bool flipped)
     {
         float m  = _dmd.getMirrorSize();
         float ax = _input_dir[0];
@@ -201,7 +201,7 @@ public:
         _image.resize(_Nphi * _Ntheta);
     }
 
-    void computeReferenceImages()
+    void computeOneMirrorImages()
     {
 
         _ref_image_off.resize(_Nphi * _Ntheta);
@@ -211,13 +211,13 @@ public:
                 float               phi          = _phi_min + i * _dphi;
                 float               theta        = _theta_min + j * _dtheta;
                 cpplap::Vect<float> output_dir   = cpplap::Vect<float>::xyAngularCoords(phi, theta, 1);
-                _ref_image_off[indexPixel(i, j)] = computeReferencePixel(output_dir, false);
-                _ref_image_on[indexPixel(i, j)]  = computeReferencePixel(output_dir, true);
+                _ref_image_off[indexPixel(i, j)] = computeOneMirrorPixel(output_dir, false);
+                _ref_image_on[indexPixel(i, j)]  = computeOneMirrorPixel(output_dir, true);
             }
         }
     }
 
-    void runReferenceTraycing()
+    void runAnalyticSimulation()
     {
 
         if (_ref_image_on.size() + _ref_image_off.size() < (size_t)2 * _Nphi * _Ntheta) {
@@ -232,19 +232,17 @@ public:
         for (int i = 0; i < Nthreads; i++) {
             int start  = i * threadSize;
             int stop   = std::min((i + 1) * threadSize, _Nphi);
-            threads[i] = std::thread([this, start, stop] { runPartialReferenceTraycing(start, stop); });
+            threads[i] = std::thread([this, start, stop] { runPartialAnalyticSimulation(start, stop); });
         }
         for (std::thread &t : threads) {
             t.join();
         }
-
-        // runPartialReferenceTraycing(0, _Nphi);
     }
 
-    void runPartialReferenceTraycing(int start, int stop)
+    void runPartialAnalyticSimulation(int start, int stop)
     {
         cpplap::HessePlane<float> beam_plane(cpplap::Vect<float>(0, 0, 0), _input_dir);
-        //#pragma omp parallel for
+
         for (int i = start; i < stop; i++) {
 
             for (int j = 0; j < _Ntheta; j++) {
@@ -269,6 +267,7 @@ public:
 
                     float amplitude = gauss(_sig, 0.0f, beam_origin.norm());
 
+                    // Uncomment for non gaussian beam
                     // float amplitude = 1;
 
                     if (flipped) {
@@ -346,7 +345,7 @@ public:
         }
     }
 
-    void printReferenceImage(std::ostream &stream, const bool flipped)
+    void printOneMirrorImage(std::ostream &stream, const bool flipped)
     {
 
         std::vector<std::complex<float>> &image = flipped ? _ref_image_on : _ref_image_off;
