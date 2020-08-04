@@ -1,9 +1,9 @@
 #ifndef RAYTRACING_H
 #define RAYTRACING_H
 #include "dmd.h"
+#include "measure_time.h"
 #include <algorithm>
 #include <complex>
-#include <measure_time.h>
 #include <random>
 #include <thread>
 

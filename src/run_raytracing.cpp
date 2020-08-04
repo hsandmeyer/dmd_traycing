@@ -1,5 +1,4 @@
 #include "raytracing.h"
-//#include "raytracing_omp.h"
 #include "test.h"
 #include "units.h"
 #include <cstdio>
