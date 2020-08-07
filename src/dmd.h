@@ -198,7 +198,7 @@ public:
         }
         catch (std::domain_error &e) {
             // If there is no mirror return directly with amplitude 0
-            return DiffractionPoint(dmd_intersec, 0, ray.dist(dmd_intersec));
+            return DiffractionPoint(dmd_intersec, 0, ray.distFromRTo(dmd_intersec));
         }
 
         // Diffraction point with current mirror
@@ -206,7 +206,7 @@ public:
 
         // First mirror up the ray. Initialize with dmd_intersec.
         // If we do not hit a mirror, this will be our return value with amplitude 0
-        DiffractionPoint first_diff_point(dmd_intersec, 0, ray.dist(dmd_intersec));
+        DiffractionPoint first_diff_point(dmd_intersec, 0, ray.distFromRTo(dmd_intersec));
 
         // Distance of the ray base vector and the diffraction point
         double last_dist = std::numeric_limits<double>::max();
