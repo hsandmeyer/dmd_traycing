@@ -34,7 +34,7 @@ int main()
     First, wie compute the diffraction image by raytraycing. To do so, we need to
     compute the diffraction points of the rays on the individual mirrors, first
     */
-    traycer.calculateNormalDiffractionPoints(100000);
+    measure_time(std::cout, [&] { traycer.calculateNormalDiffractionPoints(100000); });
 
     /*
     Write diffraction points to file for late 3D plotting
