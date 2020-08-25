@@ -301,12 +301,11 @@ public:
                 float               theta         = _theta_min + j * _dtheta;
                 std::complex<float> tot_amplitude = 0;
                 cpplap::Vect<float> output_dir    = cpplap::Vect<float>::xyAngularCoords(phi, theta, 1);
-
-                cpplap::HessePlane<float> image_plane(cpplap::Vect<float>(0, 0, 0), output_dir);
+                output_dir *= -1;
 
                 for (DiffractionPoint diff_point : _diff_points) {
 
-                    float tot_phase_shift = -image_plane.scalarDistanceTo(diff_point) + diff_point.getPhaseShift();
+                    float tot_phase_shift = diff_point * output_dir + diff_point.getPhaseShift();
 
                     float amplitude = diff_point.getAmplitude();
 
