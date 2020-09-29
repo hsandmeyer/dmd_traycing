@@ -58,9 +58,6 @@ class RayTracer {
     // Normal distribution with _sig as standard deviation
     std::normal_distribution<float> _normal_distribution;
 
-    // Uniform distribution between 0 and 2*pi
-    std::uniform_real_distribution<float> _uniform_distribution;
-
     friend std::ostream &operator<<(std::ostream &stream, const RayTracer &a);
 
     std::complex<float> computeOneMirrorPixel(const cpplap::Vect<float> out, const bool flipped)
@@ -127,7 +124,7 @@ public:
 
     RayTracer(const DmdParams params, const cpplap::Vect<float> input_dir, const float wave_length, const float sig)
         : _dmd(params), _input_dir(input_dir), _input_phi(_input_dir.phi()), _input_theta(_input_dir.theta()),
-          _wave_length(wave_length), _sig(sig), _normal_distribution(0, _sig), _uniform_distribution(0, 2 * M_PI)
+          _wave_length(wave_length), _sig(sig), _normal_distribution(0, _sig)
     {
         _input_dir.normalize();
         _generator.seed(time(nullptr));
