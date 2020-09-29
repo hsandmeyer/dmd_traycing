@@ -55,20 +55,20 @@ int main()
     // mirror diagonal
     ray = Ray(cpplap::Vect<float>(1, -3, 0), cpplap::Vect<float>(1, -1, 1), 1);
 
-    cpplap::test_exact(dmd.findDiffPoint(ray), DiffractionPoint(1, -3, 0, 1), "Mirror Diffraction Point 4");
+    cpplap::test_exact(dmd.findDiffPoint(ray), DiffractionPoint(1, -3, 0, 1, 4), "Mirror Diffraction Point 4");
 
     // Ray in random direction missing mirror diagonal. Base vector of ray lies in
     // mirror.
     ray = Ray(cpplap::Vect<float>(3.5, -1.5, sqrt(0.5)), cpplap::Vect<float>(1, 2, 4), 2);
 
-    cpplap::test_rel(dmd.findDiffPoint(ray), DiffractionPoint(3.5, -1.5, sqrt(0.5), 2), "Mirror Diffraction Point 5");
+    cpplap::test_rel(dmd.findDiffPoint(ray), DiffractionPoint(3.5, -1.5, sqrt(0.5), 2, 3.32843),
+                     "Mirror Diffraction Point 5");
 
     // Ray that goes through three mirrors. We want to select the first one
     ray =
         Ray(cpplap::Vect<float>(1, 1, 0), cpplap::Vect<float>(2.5, -0.5, -sqrt(0.5)) - cpplap::Vect<float>(1, 1, 0), 2);
 
-    cpplap::test_rel(dmd.findDiffPoint(ray),
-                     DiffractionPoint(-0.5, 2.5, sqrt(0.5), 2, -sqrt(1.5 * 1.5 + 1.5 * 1.5 + 0.5)),
+    cpplap::test_rel(dmd.findDiffPoint(ray), DiffractionPoint(-0.5, 2.5, sqrt(0.5), 2, -5),
                      "Mirror Diffraction Point 6");
 
     dparams.mirror_dist = 2;

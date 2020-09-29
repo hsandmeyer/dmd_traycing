@@ -136,13 +136,15 @@ public:
 
     cpplap::Vect<float> getRandomNormalVect()
     {
-        float r   = _normal_distribution(_generator);
-        float phi = _uniform_distribution(_generator);
+        float x = _normal_distribution(_generator);
+        float y = _normal_distribution(_generator);
 
-        cpplap::Vect<float> ret = cpplap::Vect<float>::SphericalCoords(phi, M_PI / 2, r);
+        cpplap::Vect<float> ret   = cpplap::Vect<float>(x, y, 0);
+        float               phi   = _input_dir.phi();
+        float               theta = _input_dir.theta();
 
-        ret.rotate(cpplap::Vect<float>(0, 1, 0), _input_theta);
-        ret.rotate(cpplap::Vect<float>(0, 0, 1), _input_phi);
+        ret.rotate(cpplap::Vect<float>(0, 1, 0), theta);
+        ret.rotate(cpplap::Vect<float>(0, 0, 1), phi);
 
         return ret;
     }
@@ -293,6 +295,7 @@ public:
 
         for (int i = 0; i < _Nphi; i++) {
             std::cout << i << " of " << _Nphi << std::endl;
+            float fact = 2 * M_PI / _wave_length;
 
 #pragma omp parallel for
             for (int j = 0; j < _Ntheta; j++) {
@@ -309,10 +312,9 @@ public:
 
                     float amplitude = diff_point.getAmplitude();
 
-                    tot_amplitude +=
-                        std::polar(amplitude, static_cast<float>(2 * M_PI / _wave_length * tot_phase_shift));
+                    tot_amplitude += std::polar(amplitude, fact * tot_phase_shift);
                 }
-                _image[indexPixel(i, j)] = std::abs(tot_amplitude);
+                _image[indexPixel(i, j)] = std::abs(tot_amplitude * tot_amplitude);
             }
         }
     }

@@ -5,13 +5,14 @@ set xrange [-10:10]
 set yrange [-10:10]
 set xlabel "φ [deg]"
 set ylabel "θ [deg]"
+set cbrange [0:0.01]
 set term png enhanced
 set output "image_raytracing.png"
 plot "ray_tracing.txt" u ($1*180/pi):($2*180/pi):3 with image notitle
 set output
 
 set title "Analytic solution"
-set cbrange [0:0.04]
+set cbrange [0:0.01]
 set term png enhanced
 set output "image_analytic.png"
 plot "analytic.txt" u ($1*180/pi):($2*180/pi):3 with image notitle

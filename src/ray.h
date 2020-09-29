@@ -84,7 +84,7 @@ public:
     {
         diff_point              = intersectionPointWith(ray);
         diff_point._amplitude   = ray._amplitude;
-        diff_point._phase_shift = ray.distFromRTo(diff_point);
+        diff_point._phase_shift = diff_point * ray.getV();
         return this->checkBounds(diff_point);
     }
 };

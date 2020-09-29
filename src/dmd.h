@@ -9,9 +9,9 @@
 struct DmdParams {
     int    nx;          // Number mirrors in x
     int    ny;          // Number mirrors in y
-    double angle;       // Flip angle
-    double mirror_size; // Length of mirror edge
-    double mirror_dist; // Distance between mirrors
+    float angle;       // Flip angle
+    float mirror_size; // Length of mirror edge
+    float mirror_dist; // Distance between mirrors
 };
 
 std::ostream &operator<<(std::ostream &stream, const DmdParams &a)
@@ -33,9 +33,9 @@ class Dmd {
     DmdParams _p;
     int       _nmirrors;
 
-    double _eff_width; // mirror_dist + mirror_size
-    double _size_x;    // Total dmd size in x direction
-    double _size_y;    // Total dmd size in y direction
+    float _eff_width; // mirror_dist + mirror_size
+    float _size_x;    // Total dmd size in x direction
+    float _size_y;    // Total dmd size in y direction
 
     // cpplap::Vect<float>or along edge of mirror in x direction
     cpplap::Vect<float> _dir_x_on;
@@ -111,8 +111,8 @@ public:
             throw std::domain_error("Dmd: cpplap::Vect<float>or index y out of range");
         }
 
-        double xd = vect[0] + _size_x / 2.;
-        double yd = vect[1] + _size_y / 2.;
+        float xd = vect[0] + _size_x / 2.;
+        float yd = vect[1] + _size_y / 2.;
         int    x  = xd / _eff_width;
         int    y  = yd / _eff_width;
         return std::tuple(x, y);
@@ -143,23 +143,23 @@ public:
         return getMirror(x, y);
     }
 
-    std::tuple<double, double> getMirrorCoordinates(const int i) const
+    std::tuple<float, float> getMirrorCoordinates(const int i) const
     {
         const auto [ix, iy] = de_index(i);
         return getMirrorCoordinates(ix, iy);
     }
 
-    std::tuple<char, double, double> getMirrorStatus(const int i) const
+    std::tuple<char, float, float> getMirrorStatus(const int i) const
     {
         const auto [ix, iy] = de_index(i);
         const auto [x, y]   = getMirrorCoordinates(ix, iy);
         return std::tuple(_flipped[i], x, y);
     }
 
-    std::tuple<double, double> getMirrorCoordinates(const int i, const int j) const
+    std::tuple<float, float> getMirrorCoordinates(const int i, const int j) const
     {
-        const double x = i * _eff_width - _size_x / 2 + _eff_width / 2;
-        const double y = j * _eff_width - _size_y / 2 + _eff_width / 2;
+        const float x = i * _eff_width - _size_x / 2 + _eff_width / 2;
+        const float y = j * _eff_width - _size_y / 2 + _eff_width / 2;
         return std::tuple(x, y);
     }
 
@@ -209,7 +209,7 @@ public:
         DiffractionPoint first_diff_point(dmd_intersec, 0, ray.distFromRTo(dmd_intersec));
 
         // Distance of the ray base vector and the diffraction point
-        double last_dist = std::numeric_limits<double>::max();
+        float last_dist = std::numeric_limits<float>::max();
 
         // Test mirrors surrounding dmd_intersec
         for (int i = -1 * (x > 0); i <= (x < _p.nx - 1); i++) {
@@ -221,7 +221,7 @@ public:
                 if (mirror.rayInterSec(ray, diff_point)) {
 
                     // Calculate the distance within ray
-                    double dist = diff_point.getPhaseShift();
+                    float dist = diff_point.getPhaseShift();
 
                     // If distance is smaller than before, select this as the new
                     // diffraction point
@@ -236,9 +236,9 @@ public:
         return first_diff_point;
     }
 
-    double getMirrorSize() const { return _p.mirror_size; }
+    float getMirrorSize() const { return _p.mirror_size; }
 
-    double getMirrorAngle() const { return _p.angle; }
+    float getMirrorAngle() const { return _p.angle; }
 
     int nMirrors() const { return _nmirrors; }
 };
